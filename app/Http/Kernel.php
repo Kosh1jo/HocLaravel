@@ -13,6 +13,8 @@ class Kernel extends HttpKernel
      *
      * @var array<int, class-string|string>
      */
+    // $middleware , $middlewareGroups không cân config ở router
+    //Middleware global
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
@@ -21,6 +23,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+//        \App\Http\Middleware\CheckAdminLogin::class,
+
     ];
 
     /**
@@ -36,12 +40,14 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+//            \App\Http\Middleware\CheckAdminLogin::class
         ],
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+ //           \App\Http\Middleware\AuthApi::class
         ],
     ];
 
@@ -52,6 +58,7 @@ class Kernel extends HttpKernel
      *
      * @var array<string, class-string|string>
      */
+    //đăng kí middleware và nếu muốn sử dụng ở route cụ thể nào đấy thì phải định nghĩa bên router
     protected $middlewareAliases = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
@@ -63,5 +70,7 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'auth.admin' => \App\Http\Middleware\CheckAdminLogin::class,
+        'auth.admin.product' => \App\Http\Middleware\ProductsPermission::class
     ];
 }
